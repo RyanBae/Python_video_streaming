@@ -44,7 +44,6 @@ class stream:
             sio.emit('streaming', {'img': str(b64_string)})
             # sio.emit('streaming', "streaming-test")
             height, width, channel = img.shape
-            print(height, width)
             im2 = cv2.resize(frame, dsize=(0, 0), fx=0.6, fy=0.6,
                              interpolation=cv2.INTER_AREA)
             im = cv2.imshow('video', im2)
