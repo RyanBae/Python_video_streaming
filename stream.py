@@ -35,23 +35,31 @@ class stream:
             run, frame = cap.read()
             if not run:
                 print(" Not Found Frame - Process Exit ")
+                self.process_exit()
                 break
 
             img = cv2.cvtColor(frame, cv2.IMREAD_COLOR)
-            sio.emit('streaming', {'img': str(img)})
+            jpg_img = cv2.imencode('.jpg', img)
+            b64_string = base64.b64encode(jpg_img[1]).decode('utf-8')
+            sio.emit('streaming', {'img': str(b64_string)})
             # sio.emit('streaming', "streaming-test")
-
-            cv2.imshow('video', frame)
+            height, width, channel = img.shape
+            print(height, width)
+            im2 = cv2.resize(frame, dsize=(0, 0), fx=0.6, fy=0.6,
+                             interpolation=cv2.INTER_AREA)
+            im = cv2.imshow('video', im2)
             k = cv2.waitKey(30)
             if k == 27:
-                sio.disconnect()
-                cv2.destoryAllWindows()
+                self.process_exit()
 
         cap.release()
         k = cv2.waitKey(30)
         if k == 27:
-            sio.disconnect()
-            cv2.destoryAllWindows()
+            self.process_exit()
+
+    def process_exit(self):
+        sio.disconnect()
+        cv2.destoryAllWindows()
 
 
 @sio.event
