@@ -7,6 +7,8 @@ import base64
 sio = socketio.Client()
 
 # from socket_modules import sio, streaming
+# python3 stream.py --movie=./video/cat_video.mp4
+# python3 stream.py
 
 parser = argparse.ArgumentParser(description="Please enter your argument.")
 parser.add_argument('--movie', required=False,
@@ -19,7 +21,7 @@ VIDEO_PATH = args.movie
 
 class stream:
     def __init__(self):
-        sio.connect('http://127.0.0.1:5000')
+        con = sio.connect('http://0.0.0.0:5000')
         self.run()
 
     def run(self):
