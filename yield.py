@@ -1,3 +1,22 @@
+import itertools
+
+print("\n====================================")
+print(":: Create Generator  \n")
+gen = (x*x for x in [1, 2, 3, 4, 5])
+array_gen = [x*x for x in [1, 2, 3, 4, 5]]
+
+print(gen)
+print(list(gen))
+print(array_gen)
+
+gen2 = [1, 2, 3, 4, 5]
+gen3 = (x*x for x in [1, 2, 3, 4, 5])
+print(gen2)
+print(type(gen2))
+print(gen3)
+print(type(gen3))
+
+
 print("\n====================================")
 print(":: Generator and yield \n")
 
@@ -118,6 +137,14 @@ for i in three_generator():
 
 print('\n:--- ')
 g = number_generator4(3)
+
+print('\n: Generator list ')
+print('\n: object > ')
+print(g)
+print('\n: list > ')
+print(list(g))
+
+print('\n: ')
 try:
     print(next(g))
     print(next(g))
@@ -128,4 +155,11 @@ except StopIteration as e:
     print(e)
 
 print("\n====================================")
-print("::  \n")
+print("::  Itertools \n")
+
+# import itertools
+
+horses = [1, 2, 3, 4]
+races = itertools.permutations(horses)
+print(races)
+print(list(itertools.permutations(horses)))
