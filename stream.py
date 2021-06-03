@@ -25,15 +25,13 @@ class stream:
         self.run()
 
     def run(self):
-        print(" Run !! ")
-        # sio.connect()
-
         if VIDEO_PATH != None:
             cap = cv2.VideoCapture(VIDEO_PATH)
         else:
             cap = cv2.VideoCapture(0)
-
         while cap.isOpened():
+            if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
+                cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             run, frame = cap.read()
             if not run:
                 print(" Not Found Frame - Process Exit ")
@@ -44,14 +42,33 @@ class stream:
             jpg_img = cv2.imencode('.jpg', img)
             b64_string = base64.b64encode(jpg_img[1]).decode('utf-8')
             sio.emit('streaming', {'img': str(b64_string)})
-            # sio.emit('streaming', "streaming-test")
             height, width, channel = img.shape
             im2 = cv2.resize(frame, dsize=(0, 0), fx=0.6, fy=0.6,
                              interpolation=cv2.INTER_AREA)
             im = cv2.imshow('video', im2)
+
             k = cv2.waitKey(30)
             if k == 27:
                 self.process_exit()
+
+        # while cap.isOpened():
+        #     run, frame = cap.read()
+        #     if not run:
+        #         print(" Not Found Frame - Process Exit ")
+        #         self.process_exit()
+        #         break
+
+        #     img = cv2.cvtColor(frame, cv2.IMREAD_COLOR)
+        #     jpg_img = cv2.imencode('.jpg', img)
+        #     b64_string = base64.b64encode(jpg_img[1]).decode('utf-8')
+        #     sio.emit('streaming', {'img': str(b64_string)})
+        #     height, width, channel = img.shape
+        #     im2 = cv2.resize(frame, dsize=(0, 0), fx=0.6, fy=0.6,
+        #                      interpolation=cv2.INTER_AREA)
+        #     im = cv2.imshow('video', im2)
+        #     k = cv2.waitKey(30)
+        #     if k == 27:
+        #         self.process_exit()
 
         cap.release()
         k = cv2.waitKey(30)
